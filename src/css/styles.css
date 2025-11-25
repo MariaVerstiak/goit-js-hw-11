@@ -104,16 +104,3 @@ body {
 .info-item b { 
   font-size: 14px; 
 }
-
-.loader-section {
-  display: none;  
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.loader-ellipsis {
-  width: 80px;
-  height: 24px;
-  display: inline-block;
-  position: relative;
-}
