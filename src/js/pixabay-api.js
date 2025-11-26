@@ -8,7 +8,7 @@ if (!KEY) {
   console.warn('VITE_PIXABAY_KEY не знайдено. Додайте ключ у файл .env');
 }
 
-export function getImagesByQuery(query, params = {}) {
+export async function getImagesByQuery(query, params = {}) {
   const searchParams = {
     key: KEY,
     q: query,
@@ -19,5 +19,6 @@ export function getImagesByQuery(query, params = {}) {
     ...params,
   };
 
-  return axios.get(BASE_URL, { params: searchParams });
+  const response = await axios.get(BASE_URL, {params: searchParams});
+  return response.data.hits;
 }

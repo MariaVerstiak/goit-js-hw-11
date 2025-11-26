@@ -1,12 +1,20 @@
 // src/main.js
 import './css/styles.css';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
+
 import { getImagesByQuery } from './js/pixabay-api.js';
-import { createGallery, clearGallery, showLoader, hideLoader, showNoResultsToast, showErrorToast } from './js/render-functions.js';
+import { createGallery, clearGallery, showLoader, hideLoader, showNoResultsToast, showErrorToast} from './js/render-functions.js';
 
 const form = document.getElementById('search-form');
 const input = document.getElementById('search-input');
 
-form.addEventListener('submit', (e) => {
+let lightbox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+});
+
+form.addEventListener('submit', async e => {
   e.preventDefault();
   const query = input.value.trim();
 
@@ -18,23 +26,25 @@ form.addEventListener('submit', (e) => {
   clearGallery();
   showLoader();
 
-  getImagesByQuery(query)
-    .then(response => {
-      const data = response.data;
-      const hits = Array.isArray(data.hits) ? data.hits : [];
+  try {
+    const hits = await getImagesByQuery(query);
 
-      if (hits.length === 0) {
-        showNoResultsToast();
-        return;
-      }
+    if (!hits.length) {
+      showNoResultsToast();
+      return;
+    }
 
-      createGallery(hits);
-    })
-    .catch(error => {
-      console.error('API error:', error);
-      showErrorToast('Failed to fetch images. Please check your network and try again.');
-    })
-    .finally(() => {
-      hideLoader();
-    });
+    createGallery(hits);
+    lightbox.refresh();
+
+  } 
+  
+  catch (error) {
+    console.error(error);
+    showErrorToast('Failed to fetch images. Please try again.');
+  } 
+  
+  finally {
+    hideLoader();
+  }
 });

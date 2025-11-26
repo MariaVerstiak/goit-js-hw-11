@@ -104,3 +104,21 @@ body {
 .info-item b { 
   font-size: 14px; 
 }
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 5px solid #ccc;
+  border-bottom-color: #1d8ff2;
+  border-radius: 50%;
+  display: none;
+  animation: rotation 1s linear infinite;
+  margin: 40px auto;
+}
+
+@keyframes rotation {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loader.active { display: block; }
